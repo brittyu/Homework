@@ -15,30 +15,22 @@ typedef struct pool_ {
     poolElem *tail;
 } pool;
 
-void PrintfPeople(int checkRecord, long *record);
-poolElem *firstQueue(int *worktime);
-//int MyFree(pool *top, int worktime);
+int BeginWork(pool *second, int worktime, int closetime, float *Avg, long total);
+void PrintfPeople(int checkRecord, float *Avg);
+poolElem *firstQueue(int worktime);
 
 
 int main() {
-    //must delet
-    int must = 0;
-    int closetime;
+    int closetime = -1;
     long total;
-    int *worktime;
-    worktime = &must;
+    int worktime = 0;
 
-    long record[100];
-    int checkRecord = 1;
-
+    float *Avg = (float *)malloc(sizeof(float));
+    int checkRecord;
     int people;
-    long checkTotal;
 
     int travel;
 
-    poolElem *checkHead = (poolElem *)malloc(sizeof(poolElem));
-    poolElem *newMan = (poolElem *)malloc(sizeof(poolElem));
-    poolElem *orderMan = (poolElem *)malloc(sizeof(poolElem));
     pool *second = (pool *)malloc(sizeof(pool));
 
     second->head = (poolElem *)malloc(sizeof(poolElem));
@@ -47,22 +39,53 @@ int main() {
     second->head = NULL;
     second->tail = NULL;
 
-    printf("Enter the closetime");
+    printf("Enter the closetime :");
     scanf("%d", &closetime);
-    printf("Enter the total");
+    printf("Enter the total :");
     scanf("%ld", &total);
 
-    while (*worktime <= closetime) {
-        newMan = firstQueue(worktime);
+    checkRecord = BeginWork(second, worktime, closetime, Avg, total);
+
+
+    PrintfPeople(checkRecord, Avg);
+}
+
+// 开始进行工作
+int BeginWork(pool *second, int worktime, int closetime, float *Avg, long total) {
+    int checkRecord = 1;
+    long checkTotal;
+    int durtime;
+    poolElem *newMan = (poolElem *)malloc(sizeof(poolElem));
+    poolElem *checkHead = (poolElem *)malloc(sizeof(poolElem));
+    poolElem *orderMan = (poolElem *)malloc(sizeof(poolElem));
+
+    //if (newMan->arrtime) printf("hello world");
+    while (worktime <= closetime && closetime > 0) {
+        // 产生一个客户
+        newMan = firstQueue((newMan->arrtime) ? newMan->arrtime : worktime);
+        if (!(newMan->arrtime)) exit(1);
+        if (newMan->arrtime > worktime) {
+            worktime = newMan->arrtime;
+        }
+
+        // 如果是存进去的钱是零，直接跳到下一个客户中
+        if (newMan->amount == 0) continue;
+
+        // 判断如果是取钱的情况
         if (newMan->amount < 0) {
+            // 判断如果是能够直接从银行中取到，则执行下列操作
             if (newMan->amount * (-1) < total) {
                 total = total + newMan->amount;
-                record[checkRecord] = newMan->amount;
+                durtime = randomTime();
+                *Avg += (worktime - newMan->arrtime + durtime);
                 checkRecord++;
-                *worktime += newMan->durtime;
+                worktime += durtime;
             }
+
+            // 取不到所要求的金额，到第二个队列中排队
             else {
-                if (second->tail == NULL) {
+                // 检查是是否是空队列
+                if (second->tail == NULL && second->head == NULL) {
                     second->head = newMan;
                     second->tail = newMan;
                 }
@@ -72,50 +95,53 @@ int main() {
                 }
             }
         }
+        // 存钱操作
         else {
             total = total + newMan->amount;
-            record[checkRecord] = newMan->amount;
+            durtime = randomTime();
+            *Avg += (worktime - newMan->arrtime + randomTime());
+            worktime += durtime;
             checkRecord++;
-            //检查在用户存储钱进去后是否能够解决第二列的业务
-            checkHead = second->head;
-            while (checkHead != second->head && second->head != NULL) {
-                checkTotal = second->head->amount + total;
-                if (checkTotal >= 0) {
-                    total = total + second->head->amount;
-                    record[checkRecord] = second->head->amount;
-                    checkRecord++;
-                    *worktime += *worktime + second->head->durtime;
-                    orderMan = second->head;
-                    second->head = second->head->next;
-                    free(orderMan);
-                }
-                else {
-                    second->tail->next = second->head;
-                    second->tail = second->head;
-                    second->head = second->head->next;
-                }
+
+            //while (checkHead != second->head && second->head != NULL) {
+            if (second->head != NULL) {
+                checkHead = second->head;
+                do {
+                    checkTotal = second->head->amount + total;
+                    printf("%ld\n", checkTotal);
+                    if (checkTotal >= 0) {
+                        total = total + second->head->amount;
+                        durtime = randomTime();
+                        *Avg += (worktime - newMan->arrtime + durtime);
+                        checkRecord++;
+                        worktime += durtime;
+                        orderMan = second->head;
+                        second->head = second->head->next;
+                        free(orderMan);
+                    }
+                    else {
+                        second->tail->next = second->head;
+                        second->tail = second->head;
+                        second->head = second->head->next;
+                    }
+                } while (checkHead != second->head && second->head != NULL);
             }
         }
     }
-
-    PrintfPeople(checkRecord, record);
-    printf("%ld", total);
+    printf("%ld\n", total);
+    return checkRecord;
 }
 
-int MyMalloc(pool *top, pool *man, int worktime) {
-
+// 打印结果
+void PrintfPeople(int checkRecord, float *Avg) {
+    printf("一共进行了 %d 次业务\n", checkRecord);
+    printf("交易总花费时间 %f\n", *(Avg));
+    printf("平均交易时间 %f\n", *(Avg) / checkRecord);
 }
 
-void PrintfPeople(int checkRecord, long *record) {
-    int i;
-    for (i = 1; i < checkRecord; i++) {
-        printf("%d do %ld\n", i, *(record + i));
-    }
-}
-poolElem *firstQueue(int *worktime) {
+poolElem *firstQueue(int worktime) {
     poolElem *newMan = (poolElem *)malloc(sizeof(poolElem));
-    newMan->arrtime = *worktime + randomTime();
-    newMan->durtime = randomTime();
+    newMan->arrtime = worktime + randomTime();
     newMan->amount = random();
     newMan->next = (poolElem *)malloc(sizeof(poolElem));
     newMan->next = NULL;
