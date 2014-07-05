@@ -16,6 +16,7 @@ typedef struct pool_ {
 } pool;
 
 int BeginWork(pool *second, int worktime, int closetime, float *Avg, long total);
+int addLastFirst(int arrtime, int checkRecord, int closetime, float *Avg);
 void PrintfPeople(int checkRecord, float *Avg);
 poolElem *firstQueue(int worktime);
 
@@ -128,15 +129,23 @@ int BeginWork(pool *second, int worktime, int closetime, float *Avg, long total)
             }
         }
     }
-    printf("%ld\n", total);
+
+    addLastFirst(newMan->arrtime, checkRecord, closetime, Avg);
+    // 银行营业时间到，将第二个队列中客户等待的时间加起来
+    for (; second->head != second->tail; checkRecord++) {
+        *Avg += (closetime - second->head->arrtime);
+        orderMan = second->head;
+        second->head = second->head->next;
+        printf("hello world");
+        free(orderMan);
+    }
     return checkRecord;
 }
 
 // 打印结果
 void PrintfPeople(int checkRecord, float *Avg) {
     printf("一共进行了 %d 次业务\n", checkRecord);
-    printf("交易总花费时间 %f\n", *(Avg));
-    printf("平均交易时间 %f\n", *(Avg) / checkRecord);
+    printf("客户在银行平均逗留时间 %f\n", *(Avg) / checkRecord);
 }
 
 poolElem *firstQueue(int worktime) {
@@ -146,4 +155,14 @@ poolElem *firstQueue(int worktime) {
     newMan->next = (poolElem *)malloc(sizeof(poolElem));
     newMan->next = NULL;
     return newMan;
+}
+
+// arrtime 是在银行关闭的时候第一个队列进行业务的最后一个客户到达的银行的时间
+int addLastFirst(int arrtime, int checkRecord, int closetime, float *Avg) {
+    int firstQueueArrtime;
+    // 添加在第一个队列中排队，但是没有时间进行业务的客人等待时间
+    while (firstQueueArrtime = (closetime > arrtime + randomTime()) ? (arrtime + randomTime()) : 0) {
+        *Avg += (closetime - (arrtime + randomTime()));
+        arrtime = arrtime + randomTime();
+    }
 }
