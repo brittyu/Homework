@@ -34,7 +34,7 @@ typedef struct Queue_ {
 
 //定义队列接口
 int QueueEmpty(Queue *queue);
-char GetHead(Queue *queue);
+void GetHead(Queue *queue);
 void InitialQueue(BiTree *T, Queue *queue);
 void EnQueue(Queue *queue, BiTreeNode *node);
 
@@ -43,7 +43,7 @@ void InitBiTree(BiTree *T);
 void DestroyBiTree(BiTreeNode *root);
 void CreateBiTree(BiTree *T, int some);
 void CleanBiTree(BiTree *T);
-int BiTreeDepth(BiTree *T);
+int BiTreeDepth(BiTreeNode *root);
 void InsertChild(BiTree *T, BiTreeNode *node, int leftOrRight, BiTreeNode *c);
 BiTreeNode *LeftSubling(BiTree *T, BiTreeNode *node);
 BiTreeNode *RightSubling(BiTree *T, BiTreeNode *node);
@@ -63,17 +63,126 @@ void LevelOrderTraverse(Queue *queue);
 
 
 int main() {
+    /**
+     *  建立一个含三个元素的二叉树进行测试
+     */
+    BiTreeNode *leftNode = (BiTreeNode *)malloc(sizeof(BiTreeNode));
+    BiTreeNode *rightNode = (BiTreeNode *)malloc(sizeof(BiTreeNode));
+    BiTreeNode *leftLeftNode = (BiTreeNode *)malloc(sizeof(BiTreeNode));
+    int newData;
+    Queue *queue = (Queue *)malloc(sizeof(Queue));
     //定义一个根，然后动态分配一个内存单元
     BiTree *T = (BiTree *)malloc(sizeof(BiTree));
-    /***/
+
+    // 测试 Initbitree()
+    InitBiTree(T);
+    printf("T 树是否为空 ：");
+    if (BiTreeEmpty(T))
+        printf("为空\n");
+    else {
+        printf("不为空\n");
+    }
+
+    // 生成根的数据 测试方法 CreateBiTree()
+    printf("请输入根的数据");
+    scanf("%d", &newData);
+    CreateBiTree(T, newData);
+    printf("T 树是否为空 ： ");
+    if (BiTreeEmpty(T))
+        printf("为空\n");
+    else {
+        printf("不为空\n");
+    }
+
+    // 生成根的左孩子
+    printf("请输入根的左孩子的数据");
+    scanf("%d", &newData);
+    T->root->left = leftNode;
+    leftNode->data = newData;
+    leftNode->parent = T->root;
+    // 生成根的左孩子的左孩子
+    printf("添加根的左孩子的左孩子用于测试");
+    scanf("%d", &newData);
+    T->root->left->left = leftLeftNode;
+    leftLeftNode->data = newData;
+    leftLeftNode->parent = T->root->left;
+
+    // 生成根的右孩子
+    printf("请输入根的右子树");
+    scanf("%d", &newData);
+    T->root->right = rightNode;
+    rightNode->data = newData;
+    rightNode->parent = T->root;
+
+    /**
+     * 打印出根的数据
+     * 测试的方法有 Root() 和 Value()
+     */
+    printf("根的数据是 ：%d\n", Visit(Root(T)));
+
+    /**
+     * 测试BiTreeDepth() 这个方法
+     */
+    printf("树的深度是 %d \n", BiTreeDepth(T->root));
+
+    /**
+     *  测试Leftchild() 和 Rightchild()
+     */
+    printf("根的左孩子的数据是： %d \n", Visit(LeftChild(Root(T))));
+    printf("根的右孩子的数据是： %d \n", Visit(RightChild(Root(T))));
+
+    // 测试 Parent()
+    printf("根的左孩子的父亲节点数据 : %d ", Visit(Parent(T, LeftChild(Root(T)))));
+
+    // 测试Leftsubling()
+    printf("测试LeftSubling的方法，输出是：%d \n", Visit(LeftSubling(T, T->root->right)));
+
+    // 测试先序遍历 中序遍历 和 后序遍历
+    printf("先序测试结果：");
+    PreOrderTraverse(T->root);
+    printf("\n");
+    printf("中序测试结果");
+    InOrderTraverse(T->root);
+    printf("\n");
+    printf("后序测试结果");
+    PostOrderTraverse(T->root);
+    printf("\n");
+
+    /**
+     * 测试Deletechild()和Destroybitree() 这两个方法
+     * 在Deletechild() 中调用了Destroybitree() 这个方法
+     */
+    printf("删除根的左子树，然后通过先序遍历遍历树\n");
+    DeleteChild(T, T->root, 0);
+    T->root->left = NULL;
+    PreOrderTraverse(T->root);
+
+    return 0;
 }
 
 /**
- * 初始化二叉树
+ * 初始化二叉树, 并且加入根的数据
  * @param T [树框架的地址]
  */
 void InitBiTree(BiTree *T) {
+    T->root = (BiTreeNode *)malloc(sizeof(BiTreeNode));
     T->root = NULL;
+}
+
+void CreateBiTree(BiTree *T, int newData) {
+    BiTreeNode *newNode = (BiTreeNode *)malloc(sizeof(BiTreeNode));
+    T->root = newNode;
+    newNode->data = newData;
+}
+
+int BiTreeDepth(BiTreeNode *root) {
+    if (root == NULL)
+        return 0;
+
+    int leftDepth = BiTreeDepth(root->left);
+    int rightDepth = BiTreeDepth(root->right);
+
+    return (leftDepth > rightDepth) ? (leftDepth + 1) : (rightDepth + 1);
 }
 
 /**
@@ -81,7 +190,7 @@ void InitBiTree(BiTree *T) {
  * @param root [树的根地址]
  */
 void DestroyBiTree(BiTreeNode *root) {
-    while (root) {
+    if (root) {
         DestroyBiTree(root->left);
         DestroyBiTree(root->right);
         free(root);
@@ -89,15 +198,14 @@ void DestroyBiTree(BiTreeNode *root) {
 }
 
 /**
- * [LeftSubling description]
- * @param  T    [description]
- * @param  node [description]
- * @return      [description]
+ * @param  T    二叉树
+ * @param  node 要操作的节点
+ * @return      返回node的右兄弟
  */
-BiTreeNode *LeftSubling(BiTree *T, BiTreeNode *node) {
+BiTreeNode *RightSubling(BiTree *T, BiTreeNode *node) {
     BiTreeNode *parent = (BiTreeNode *)malloc(sizeof(BiTreeNode));
     BiTreeNode *right = (BiTreeNode *)malloc(sizeof(BiTreeNode));
-    if (T == NULL || node == NULL)
+    if (T == NULL || node == NULL || node == T->root)
         return NULL;
 
     parent = node->parent;
@@ -111,16 +219,15 @@ BiTreeNode *LeftSubling(BiTree *T, BiTreeNode *node) {
 }
 
 /**
- * [RightSubling description]
- * @param  T    [description]
- * @param  node [description]
- * @return      [description]
+ * @param  T    二叉树
+ * @param  node 要操作的节点
+ * @return      返回node的左兄弟节点
  */
-BiTreeNode *RightSubling(BiTree *T, BiTreeNode *node) {
+BiTreeNode *LeftSubling(BiTree *T, BiTreeNode *node) {
     BiTreeNode *parent = (BiTreeNode *)malloc(sizeof(BiTreeNode));
     BiTreeNode *left = (BiTreeNode *)malloc(sizeof(BiTreeNode));
 
-    if (T == NULL || node == NULL)
+    if (T == NULL || node == NULL || node == T->root)
         return NULL;
 
     parent = node->parent;
@@ -133,13 +240,15 @@ BiTreeNode *RightSubling(BiTree *T, BiTreeNode *node) {
 }
 
 /**
- * [InsertChild description]
- * @param T           [description]
- * @param node        [description]
- * @param leftOrRight [description]
- * @param c           [description]
+ * 将二叉树插入指定的节点中
+ * @param T           二叉树
+ * @param node        要操作的节点
+ * @param leftOrRight 判断是节点的左子树还是右子树
+ * @param c           要进行插入的二叉树
  */
-void InsertChild(BiTree *T, BiTreeNode *node, int leftOrRight, BiTreeNode *c) {
+/*void InsertChild(BiTree *T, BiTreeNode *node, int leftOrRight, int newData, BiTreeNode *c) {
+    if (T == NULL) exit(1);
+
     BiTreeNode *child = (BiTreeNode *)malloc(sizeof(BiTreeNode));
     if (leftOrRight == 0) {
         child = node->left;
@@ -149,136 +258,136 @@ void InsertChild(BiTree *T, BiTreeNode *node, int leftOrRight, BiTreeNode *c) {
         child = node->right;
         node->right = c;
     }
+
+    child->data = newData;
     c->right = child;
-}
+}*/
 
 /**
- * [DeleteChild description]
- * @param T           [description]
- * @param p           [description]
- * @param leftOrRight [description]
+ * 删除二叉树指定节点
+ * @param T           二叉树
+ * @param p           指定节点
+ * @param leftOrRight 判断是左孩子还是右孩子
  */
 void DeleteChild(BiTree *T, BiTreeNode *p, int leftOrRight) {
-    if (T == NULL)
-        return;
+    if (!T) exit(1);
 
     if (leftOrRight == 0) {
+        DestroyBiTree(p->left);
+        p->left = NULL;
     }
-
-    if (p->left == NULL && p->right == NULL)
-        free(p);
-
-    return;
+    else {
+        DestroyBiTree(p->right);
+        p->right = NULL;
+    }
 }
 
 /**
- * [PreOrderTraverse description]
- * @param root [description]
+ * 先序遍历
  */
 void PreOrderTraverse(BiTreeNode *root) {
     if (root) {
-        printf("%c", root->data);
+        printf("%d ", root->data);
         PreOrderTraverse(root->left);
         PreOrderTraverse(root->right);
     }
-    return;
 }
 
 /**
- * [InOrderTraverse description]
- * @param root [description]
+ * 中序遍历
  */
 void InOrderTraverse(BiTreeNode *root) {
     if (root) {
         PreOrderTraverse(root->left);
-        printf("%c", root->data);
+        printf("%d ", root->data);
         PreOrderTraverse(root->right);
     }
 }
 
 /**
- * [PostOrderTraverse description]
- * @param root [description]
+ * 后序遍历
  */
 void PostOrderTraverse(BiTreeNode *root) {
     if (root) {
         PreOrderTraverse(root->left);
         PreOrderTraverse(root->right);
-        printf("%c", root->data);
+        printf("%d ", root->data);
     }
 }
 
 /**
- * [LevelOrderTraverse description]
- * @param queue [description]
+ * 层级遍历
  */
 void LevelOrderTraverse(Queue *queue) {
-    while (queue) {
-        printf("%c", Visit(queue->head->address));
-        EnQueue(queue, queue->head->address->left);
-        EnQueue(queue, queue->head->address->right);
-    }
+    printf("%d\n", queue->head->address->data);
+    if (queue->head->address->left)
+    EnQueue(queue, queue->head->address->left);
+    if (queue->head->address->right)
+    EnQueue(queue, queue->head->address->right);
+    GetHead(queue);
+    printf("%d\n", queue->head->next->address->data);
+    /*while (queue->head != NULL) {
+        printf("%d ", queue->head->address->data);
+        if (queue->head->address->left)
+            EnQueue(queue, queue->head->address->left);
+        if (queue->head->address->right)
+            EnQueue(queue, queue->head->address->right);
+        GetHead(queue);
+    }*/
+
 }
 
 /**
- * [InitialQueue description]
- * @param T     [description]
- * @param queue [description]
+ * 初始化队列
  */
 void InitialQueue(BiTree *T, Queue *queue) {
     QueueElem *newQueueElem = (QueueElem *)malloc(sizeof(QueueElem));
     if (T) {
         newQueueElem->address = T->root;
+        newQueueElem->next = (QueueElem *)malloc(sizeof(QueueElem));
+        newQueueElem->next = NULL;
         queue->head = queue->tail = newQueueElem;
     }
 }
 
 /**
- * [QueueEmpty description]
- * @param  queue [description]
- * @return       [description]
+ * 检查队列是否为空
  */
 int QueueEmpty(Queue *queue) {
-    if (queue->head)
+    if (queue->head != NULL)
         return -1;
 
     return 1;
 }
 
 /**
- * [GetHead description]
- * @param  queue [description]
- * @return       [description]
+ * 出队列， 不打印
  */
-char GetHead(Queue *queue) {
+void GetHead(Queue *queue) {
     QueueElem *order = (QueueElem *)malloc(sizeof(QueueElem));
-    BiTreeNode *node = (BiTreeNode *)malloc(sizeof(BiTreeNode));
-    char data;
-    if (queue->head) {
-        node = queue->head->address;
-        data = node->data;
+    if (queue->head != NULL) {
         order = queue->head;
-        queue->head = queue->head->next;
+        if (queue->head == queue->tail) {
+            queue->head = queue->tail = NULL;
+        }
+        else {
+            queue->head = queue->head->next;
+        }
         free(order);
-        return data;
     }
-    return -1;;
 }
 
 /**
- * [EnQueue description]
- * @param queue [description]
- * @param node  [description]
+ * 入队列
  */
 void EnQueue(Queue *queue, BiTreeNode *node) {
-    QueueElem *orderTail = (QueueElem *)malloc(sizeof(QueueElem));
     QueueElem *newQueueElem = (QueueElem *)malloc(sizeof(QueueElem));
-    if (newQueueElem->address = node) {
-        orderTail = queue->tail;
-        orderTail->next = newQueueElem;
-        queue->tail = newQueueElem;
-    }
+    newQueueElem->next = (QueueElem *)malloc(sizeof(QueueElem));
+    newQueueElem->next = NULL;
+    queue->tail->next = (QueueElem *)malloc(sizeof(QueueElem));
+    queue->tail->next = newQueueElem;
+    queue->tail = newQueueElem;
 
     if (queue->head == NULL)
-        queue->head = newQueueElem;
+        queue->head =queue->tail = newQueueElem;
 }
