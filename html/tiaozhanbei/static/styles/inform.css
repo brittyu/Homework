@@ -1,0 +1,75 @@
+
+.left_inform {
+    margin-top: 15px;
+    margin-right: 15px;
+    margin-left: 31px;
+    float: left;
+
+    width: 663px;
+    height: 483px;
+    border: 1px solid #e4e4e4;
+}
+
+.left_inform .same a {
+    width:275px;
+}
+
+.left_inform>div {
+    height: 10px;
+    background-color: #1e7eb5;
+}
+
+.left_inform li {
+    margin-left: 20px;
+}
+
+.left_inform>ul {
+    list-style: none;
+}
+
+.left_inform .date {
+    position: relative;
+    right: -190px;
+    top: 0px;
+
+    font-size: 14px;
+    border-bottom: none;
+
+    color: #aaa;
+}
+
+.left_inform a,.left_inform span{
+    color: #000;
+}
+
+.left_inform a:hover {
+    color: #1e80b7;
+}
+
+
+.left_footer {
+    text-align: center;
+    background-color: white!important;
+}
+
+.left_footer>ul {
+    overflow: hidden;
+    display: inline-block;
+    *display: inline; /*只有ie 6 7 识别*/
+    zoom:1; /*触发ie 6 7 下的haslayout*/
+}
+
+.left_footer li {
+    float: left;
+    margin-left: 15px;
+    margin-top: 20px;
+}
+
+.right_inform {
+    margin-top: 15px;
+    float: left;
+
+    width: 225px;
+    height: 483px;
+    border: 1px solid #e4e4e4;
+}

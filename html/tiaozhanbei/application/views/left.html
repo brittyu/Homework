@@ -1,0 +1,8 @@
+<div class="left_brief left_special left_list" id="leftNav">
+            <ul id="leftNav">
+				{% for c in list %}
+				<li><a {% if category.id == c.id %} class="bac_blue" {% endif %}href="{{ site_url("list") }}/{{ c.id }}">{{  c.category  }}</a></li>
+				{% endfor %}
+            </ul>
+       </div>
+

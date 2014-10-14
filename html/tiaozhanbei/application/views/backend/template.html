@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>vinko</title>
+	<link rel="stylesheet" href="{{ static_url('styles/vendor/pure-min.css') }}" />
+	<link rel="stylesheet" href="{{ static_url('styles/style.css') }}" />
+</head>
+<body>
+    <section class="container medium">
+        <div class="wrapper" id="login">
+            <div class="grid">
+				{% block header %}
+
+				{% endblock %}
+				{% block form %}
+
+				{% endblock %}
+            </div>
+        </div>
+    </section>
+</body>
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script src="<?php echo base_url('static/scripts/vinko.js');?>"></script>
+</html>

@@ -1,0 +1,15 @@
+    <div id="content">
+       <p class="position">
+            您现在的位置：
+	    <a href="{{ site_url('') }}">首页 </a>
+	    <span>&gt;&gt;</span>
+		{% if page_name in ['news', 'inform', 'new_post', 'list'] %}
+		<a href="{{ site_url('news') }}">新闻宣传</a>
+		{% else %}
+	    <a href="{{ site_url('p/9/28') }}">走进挑战杯</a>
+		{% endif %}
+		{% if category %}
+	    <span>&gt;&gt;</span>
+	    <a class='red' href='#'>{{ category.category }}</a>
+		{% endif %}
+       </p>

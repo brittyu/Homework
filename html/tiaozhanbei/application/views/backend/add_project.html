@@ -1,0 +1,52 @@
+{% extends('backend/templateP.html') %}
+	{% block content %}
+        <section id="dashboard" class="pure-g grid">
+            <section id="main" class="pure-u-3-4">
+				<a href="{{ site_url("backend/posts/project_list") }}"><h1>项目展示</h1></a>
+                </header>
+                <!-- 模块内容 -->
+                <article id="module-content">
+					<form class="pure-form pure-form-aligned" method="post" action="{{ site_url('backend/posts/add_pro') }}"/>
+                    <div class="pure-control-group">
+						<label for="title">标题</label>
+						<input type="text" class="pure-u-1-2" name="title"/>
+                    </div>
+					<div class="pure-control-group">
+						<label for="larger">大类</label>
+						<select name="larger">
+                        {% for category in larger %}
+                            <option value="{{ category.id }}">{{ category.category }}</option>
+                        {% endfor %}
+						</select>
+						<label for="little">小类</label>
+						<select name="little">
+                        {% for category in little %}
+                            <option value="{{ category.id }}">{{ category.category }}</option>
+                        {% endfor %}
+						</select>
+					</div>
+
+                    <div class="pure-control-group">
+						<label for="content">简介</label>
+						<textarea  name="intro" cols="60" rows="7"/></textarea>
+						<label for="detail">详细介绍</label>
+						<textarea  name="detail" cols="60" rows="7"></textarea>
+						<label for="award">获奖情况</label>
+						<textarea name="award"cols="60" rows="7"></textarea>
+						<label for="pict">图片链接</label>
+                        <div>
+						<p><label></label><input type="text" class="pure-u-1-2" name="src1"/></p>
+                        <p><label></label><input type="text" class="pure-u-1-2" name="src2"/></p>
+                        <p><label></label><input type="text" class="pure-u-1-2" name="src3"/></p>
+                        <p><label></label><input type="text" class="pure-u-1-2" name="src4"/></p>
+                        <p><label></label><input type="text" class="pure-u-1-2" name="src5"/></p>
+						</p>
+                    </div>
+	    			</div>
+                    <div class="pure-controls">
+						<button class="pure-button pure-button-primary" type="submit">提交～</button>
+                    </div>
+				</form>
+			</article>
+            </section>
+			{% endblock %}

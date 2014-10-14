@@ -1,0 +1,29 @@
+{% extends('backend/templateP.html') %}
+		{% block content %}
+        <!--Alert消息模块-->
+        </div>
+        <section id="dashboard" class="pure-g grid">
+            <section id="main" class="pure-u-3-4">
+		<!-- 模块名字 -->
+        	<header id="module-name">
+				<a href="{{ site_url("backend/posts/project_list") }}"><h1>项目展示</h1></a>
+	        </header>
+	        <!-- 模块内容 -->
+                <article id="module-content">
+					<h2 align="center">{{ post.title }}</h2>
+		<p>
+		<h3 align="center">{{ post.larger }}</h3>
+		<h3 align="center">{{ post.little }}</h3>
+		</p>
+		<p>{{ post.intro }}</p>
+		<p>{{ post.detail }}</p>
+		<p>{{ post.award }}</P>
+		    <h3>项目作品</h3>
+			{% autoescape false %}
+			{% for photo in post.src %}
+			<img src="{{ photo.src }}">";
+			{% endfor %}
+			{% endautoescape %}
+                </article>
+            </section>
+			{% endblock %}

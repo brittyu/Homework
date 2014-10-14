@@ -1,0 +1,26 @@
+{% extends('template.html') %}
+{% block stylesheet_or_script %}
+    <link href="{{ static_url('styles/introduce.css') }}" rel="stylesheet" media="screen">
+{% endblock %}
+{% block content %}
+{% include('url.html') %}
+{% include('intro_left.html') %}
+
+       <div class="right_introduce">
+	<ul id="circle">
+	    <!--验证是哪篇文章-->
+		{% set i = 1 %}
+		{% for p in posts %}
+		<li><a {% if p.id == post[0].id %}class = "bac_blue"{% endif %}href="{{ site_url("p") }}/{{ category.id }}/{{ p.id }}">{{ p.cid }}</a></li>
+		{% endfor %}
+            </ul>
+			<h2>{{ post[0].title }}</h2>
+            <p>
+			{% autoescape false %}
+			{{ post[0].content }}
+			{% endautoescape %}
+            </p>
+
+       </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends('backend/template.html') %}
+				{% block form %}
+                <form class="pure-form pure-form-aligned" method="post" action="{{ site_url('backend/posts/alter_project_category') }}/{{ category_id }}">
+                    <div class="pure-control-group">
+                        <label for="category">输入新类名</label>
+						<input type="text" name="category" class="pure-u-1-2"/>
+                    </div>
+                    <div class="pure-controls">
+						<button class="pure-button pure-button-primary" type="submit">修改</button>
+                    </div>
+				</form>
+				{% endblock %}

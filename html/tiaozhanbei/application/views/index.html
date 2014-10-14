@@ -1,0 +1,136 @@
+{% extends('template.html') %}
+
+{% block stylesheet_or_script %}
+    <link href="{{ static_url('styles/index.css') }}" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div id="display">
+            <div id="box">
+                <ul class="news">
+					{% for p in picture %}
+						{% if p.src %}
+						<li><a href="{{ site_url("p") }}/{{ p.category_id }}/{{ p.id }}">{% autoescape false %}<img {{ p.src[0] }}>{% endautoescape %}</a></li>
+						{% endif %}
+					{% endfor %}
+                </ul>
+                <ul class="count">
+					{% for i in range(1, 4) %}
+					<li>{{ i }}</li>
+					{% endfor %}
+                </ul>
+            </div>    
+            <div class="message">
+                <div class="pre">
+                   <a class="pre_inone" href="">最新资讯</a>
+                   <a class="pre_intwo" href="">通知公告</a>
+				   <a class="right" href="{{ site_url('news') }}">more>></a>
+                </div>
+                <ul class="same">
+					{% if top.kuaixun %}
+					<li>
+					<a href="{{ site_url("p") }}/{{ top.kuaixun.category_id }}/{{ top.kuaixun.id }}"><span>[置顶]</span>{{ top.kuaixun.title }}</a>
+					</li>
+					{% endif %}
+					{% for post in kuaixun %}
+                    <li>
+					<a href="{{ site_url("p") }}/{{ post.category_id }}/{{ post.id }}">{{ post.title }}</a>
+					<span class="date">{{ post.date }}</span>
+                    </li>
+					{% endfor %}
+                </ul>
+                 <ul class="same message_in">
+					{% if top.inform %}
+					<li>
+					<a href="{{ site_url("p") }}/{{ top.inform.category_id }}{{ top.inform.id }}"><span>[置顶]</span>{{ top.inform.title }}</a>
+					</li>
+					{% endif %}
+					 {% for post in inform %}
+                    <li>
+					<a href="{{ site_url("p") }}/{{ post.category_id }}/{{ post.id }}">{{ post.title }}</a>
+					<span class="date">{{ post.date }}</span>
+                    </li>
+					{% endfor %}
+                </ul>
+            </div>
+            <div class="relevance">
+                <div class="title">
+                    <span></span><p>相关链接</p>
+                </div>
+                <ul class="same">
+        <li><a href="http://tiaozhanbei.net">挑战杯官网</a></li>
+                    <li><a href="http://www.gdut.edu.cn/">广东工业大学官网</a></li>
+                    <li><a href="http://www.ust.hk/gb/">香港科技大学官网</a></li>
+                </ul>
+            </div>    
+        </div>
+        <div id="medium">
+            <div class="title">
+				<span></span><p>媒体聚焦</p><a href="{{ site_url('list/4') }}">more&gt;&gt;</a>
+            </div>
+            <ul class="same">
+				{% if top.medium %}
+				<li>
+				<a href="{{ site_url("p") }}/{{ top.medium.category_id }}{{ top.medium.id }}"><span>[置顶]</span>{{ top.medium.title }}</a>
+				</li>
+					{% endif %}
+				{% for post in medium %}
+				<li><a href="{{ site_url("p") }}/{{ post.category_id }}/{{ post.id }}">{{ post.title }}</a></li>
+				{% endfor %}
+            </ul>
+        </div>
+        <div id="contest">
+            <div class="title">
+				<span></span><p>竞赛花絮</p><a href="{{ site_url('list/5') }}">more&gt;&gt;</a>
+            </div>
+            <ul class="same">
+				{% if top.competition %}
+				<li>
+				<a href="{{ site_url("p") }}/{{ top.competition.category_id }}{{ top.competition.id }}"><span>[置顶]</span>{{ top.competition.title }}</a>
+				</li>
+					{% endif %}
+				{% for post in competition %}
+				<li><a href="{{ site_url("p") }}/{{ post.category_id }}/{{ post.id }}">{{ post.title }}</a></li>
+				{% endfor %}
+            </ul>
+        </div>
+        <div id="project">
+            <div class="title">
+				<span></span><p>项目展示</p><a href="{{ site_url('pro_list') }}">more&gt;&gt;</a>
+            </div>
+        <ul>
+			{% for post in projects %}
+                <li>
+				<a href="{{ site_url("pro") }}/{{ post.id }}">
+					{% autoescape false %}
+					<img src={{ post.src }}>
+					{% endautoescape %}
+			    	<p class="introduce">{{ post.title }}</p>
+                </a>
+				</li>
+			{% endfor %}
+            </ul>
+        </div>
+        <div id="video">
+            <div class="title">
+                <span></span><p>影音专区</p><a href="">more&gt;&gt;</a>
+            </div>
+            <object id="ssss" width="314px" height="251px" ><param name="allowScriptAccess" value="always" /><embed pluginspage="http://www.macromedia.com/go/getflashplayer" src="http://you.video.sina.com.cn/api/sinawebApi/outplayrefer.php/vid=122893119_2791548852_aBqySHM4C2PK+l1lHz2stqlF+6xCpv2xhGizslOhIQZRUA6YJMXNb9wF4iHfA85D+HoLHcwydPwk3xQuaatR/s.swf" type="application/x-shockwave-flash" flashvars="autoPlay=0" name="ssss" allowFullScreen="true" allowScriptAccess="always" width="314px"  height="251px"></embed></object>
+        </div>
+        <div id="jornal">
+            <div class="title">
+                <span></span><p>挑战杯特刊</p><a href="">more&gt;&gt;</a>
+            </div>
+            <a href="{{ site_url('special') }}">
+                <img src="{{ static_url('images/news.jpg') }}">
+            </a>
+            <a href="{{ site_url('special') }}">
+                <img src="{{ static_url('images/news.jpg') }}">
+            </a>       
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

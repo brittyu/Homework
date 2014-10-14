@@ -1,0 +1,20 @@
+{% extends('backend/templateP.html') %}
+	{% block content %}
+        <!--Alert消息模块-->
+        <section id="dashboard" class="pure-g grid">
+            <section id="main" class="pure-u-3-4">
+                <!-- 模块名字 -->
+                <header id="module-name">
+                    <h1>欢迎, 管理猿</h1>
+                </header>
+                <!-- 模块内容 -->
+                <article id="module-content">
+                    <ul class="badges">
+						{% for category in categories %}
+						<li><a href="{{ site_url("backend/posts/page") }}/{{ category.id }}"class="badge">{{ category.category }}</a></li>
+						{% endfor %}
+						<li><a class="badge" href="{{ site_url("backend/posts/project_list") }}">项目展示</a></li>
+                    </ul>
+                </article>
+            </section>
+	{% endblock %}

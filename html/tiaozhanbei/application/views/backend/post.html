@@ -1,0 +1,21 @@
+{% extends('backend/templateP.html') %}
+		{% block content %}
+        <!--Alert消息模块-->
+        <section id="dashboard" class="pure-g grid">
+            <section id="main" class="pure-u-3-4">
+		<!-- 模块名字 -->
+        	<header id="module-name">
+				<a href="{{ site_url("backend/posts/page") }}/{{ post[0].category_id }}"><h1>{{ post[0].category }}</h1></a>
+	        </header>
+	        <!-- 模块内容 -->
+                <article id="module-content">
+					<h2 align="center">{{ post[0].title }}</h2>
+
+					{% autoescape false %}
+					<p>{{ post[0].content }}</p>
+					{% endautoescape %}
+
+					<i>{{ post[0].date }}</i>
+                </article>
+            </section>
+		{% endblock %}

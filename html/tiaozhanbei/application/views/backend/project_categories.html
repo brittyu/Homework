@@ -1,0 +1,89 @@
+{% extends('backend/templateP.html') %}
+    {% block content %}
+        <section id="dashboard" class="pure-g grid">
+            <section id="main" class="pure-u-3-4">
+                <!-- 模块名字 -->
+                <header id="module-name">
+                    <h1>所有项目展示分类</h1>
+                </header>
+                <!-- 模块内容 -->
+                <article id="module-content">
+                    <div class="inner pure-g">
+                        <div id="module-meta" class="pure-u-2-3">
+                            <p>大类</p>
+                        </div>
+                    </div>
+                    <table class="list pure-table pure-table-horizontal">
+                        <thead>
+                            <tr>
+                                <th class="larger">类名</th>
+                                <th>---------</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for category in larger %}
+                            <tr>
+                                <td>
+                                    <a href="#">{{ category.category }}</a>
+                                </td>
+                                <td>---------</td>
+                                <td>
+                                    <a class="pure-button pure-button-primary" href="{{ site_url('backend/posts/show_project_category') }}/{{ category.id }}">修改</a>
+                                    <a class="pure-button pure-button-error" href="{{ site_url('backend/posts/delete_category') }}/{{ category.id }}">删除</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <form method="POST" class="pure-form pure-form-aligned" action="{{ site_url('backend/posts/add_project_category') }}">
+                        <div class="pure-control-group">
+                            <label for="category">分类名</label>
+                            <input type="text" name="category" class="pure-u-1-2"/>
+                            <input type="hidden" value="1" name="is_larger"/>
+                        </div>
+                        <div class="pure-controls">
+                            <button class="pure-button pure-button-primary" type="submit">添加大类</button>
+                        </div>
+                    </form>
+                    <div class="inner pure-g">
+                        <div id="module-meta" class="pure-u-2-3">
+                            <p>小类</p>
+                        </div>
+                    </div>
+                    <table class="list pure-table pure-table-horizontal">
+                        <thead>
+                            <tr>
+                                <th class="larger">类名</th>
+                                <th>---------</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for category in little %}
+                            <tr>
+                                <td>
+                                    <a href="#">{{ category.category }}</a>
+                                </td>
+                                <td>----------</td>
+                                <td>
+                                    <a class="pure-button pure-button-primary" href="{{ site_url('backend/posts/show_project_category') }}/{{ category.id }}">修改</a>
+                                    <a class="pure-button pure-button-error" href="{{ site_url('backend/posts/delete_category')}}/{{ category.id }}">删除</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <form method="POST" class="pure-form pure-form-aligned" action="{{ site_url('backend/posts/add_project_category') }}">
+                        <div class="pure-control-group">
+                            <label for="category">分类名</label>
+                            <input type="text" name="category" class="pure-u-1-2"/>
+                            <input type="hidden" value="0"/>
+                        </div>
+                        <div class="pure-controls">
+                            <button class="pure-button pure-button-primary" type="submit">添加小类</button>
+                        </div>
+                    </form>
+                </article>
+            </section>
+    {% endblock %}
