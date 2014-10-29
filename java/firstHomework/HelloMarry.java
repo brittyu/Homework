@@ -19,7 +19,7 @@ class Person {
     String name;
     int age;
     char gender;
-    String partner;
+    String partner = "";
 
     public Person(String name, int age, char gender) {
         this.name = name;
@@ -30,10 +30,12 @@ class Person {
     boolean marry(Person p) {
        if (this.checkPerson() && p.checkPerson()) {
            if (this.gender != p.gender) {
-               this.partner = p.name;
-               p.partner = this.name;
+               if (this.partner.equals("") && p.partner.equals("")) {
+                   this.partner = p.name;
+                   p.partner = this.name;
 
-               return true;
+                   return true;
+               }
            }
        }
 
