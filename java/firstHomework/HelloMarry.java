@@ -1,10 +1,12 @@
 public class HelloMarry {
     public static void main(String[] args) {
-        boolean canMarry;
+        boolean canMarry = false;;
         Person p1 = new Person("jack", 25, 'w');
         Person p2 = new Person("luxi", 22, 'm');
 
-        canMarry = p1.marry(p2);
+        if (p1.checkPerson() && p2.checkPerson()) {
+            canMarry = p1.marry(p2);
+        }
 
         if (canMarry) {
             System.out.println("Marry");
