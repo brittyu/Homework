@@ -2,7 +2,6 @@ from app import app
 from flask import render_template, flash, redirect
 from .forms import LoginForm
 from libraries.database import cursor, conn
-from libraries.hello import * 
 
 @app.route('/')
 @app.route('/index')
@@ -43,7 +42,3 @@ def checkdata():
     conn.close()
     return data[1]
 
-@app.route('/sayhello')
-def say():
-    response = sayhello()
-    return response

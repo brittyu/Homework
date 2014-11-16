@@ -1,3 +1,5 @@
+import os
+
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
 
@@ -13,3 +15,7 @@ DBHOST = 'localhost'
 DBPASSWORD = 'yxs'
 DBNAME = 'blog'
             
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+SQLALCHEMY_DATABASE_URI = 'mysql://root:yxs@localhost/flask'
+SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
