@@ -3,31 +3,38 @@ set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#rc()
+call vundle#begin()
 
-Bundle 'gmarik/Vundle.vim'
-Bundle 'scrooloose/syntastic'
-Bundle 'majutsushi/tagbar'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'mattn/emmet-vim'
-Bundle 'pangloss/vim-javascript'
-Bundle 'skammer/vim-css-color'
-Bundle 'plasticboy/vim-markdown'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'vim-scripts/DoxygenToolkit.vim'
-Bundle 'vim-scripts/Rainbow-Parenthesis.git'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'nathanaelkane/vim-indent-guides'
-Bundle 'junegunn/vim-easy-align'
-Bundle 'othree/html5.vim'
-Bundle 'xhr/vim-io'
-Bundle 'adimit/prolog.vim'
-Bundle 'Raimondi/delimitMate'
-Bundle 'tpope/vim-rails'
-Bundle 'slim-template/vim-slim'
-Bundle 'kien/ctrlp.vim'
-Bundle 'chilicuil/vim-sml-coursera'
+Plugin 'gmarik/Vundle.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'mattn/emmet-vim'
+Plugin 'tpope/vim-commentary'
+Plugin 'pangloss/vim-javascript'
+Plugin 'skammer/vim-css-color'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'vim-scripts/DoxygenToolkit.vim'
+Plugin 'vim-scripts/Rainbow-Parenthesis.git'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'junegunn/vim-easy-align'
+Plugin 'othree/html5.vim'
+Plugin 'xhr/vim-io'
+Plugin 'adimit/prolog.vim'
+Plugin 'Raimondi/delimitMate'
+Plugin 'tpope/vim-rails'
+Plugin 'slim-template/vim-slim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'chilicuil/vim-sml-coursera'
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/gist-vim'
+Plugin 'mxw/vim-jsx'
+Plugin 'scrooloose/syntastic'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'Lokaltog/vim-powerline'
 
 
 set softtabstop=4
@@ -41,8 +48,21 @@ set expandtab
 set foldmethod=indent
 set cindent
 set wrap
+set pastetoggle=<F2>
+set laststatus=2
 
+call vundle#end()
 filetype plugin indent on
+
+" nerdtree configure
+" auto open a nerdtree when vim starts up
+" autocmd vimenter * NERDTree
+autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+
 
 if has("autocmd")
     autocmd FileType javascript setlocal ts=2 sw=2 expandtab
@@ -105,24 +125,6 @@ let mapleader=","
 
 let g:use_zen_expandabbr_key = '<c-y>'
 
-function! AutoPair(open, close)
-    let line = getline('.')
-    if col('.') > strlen(line) || line[col('.') - 1] == ' '
-        return a:open.a:close."\<ESC>i"
-    else
-        return a:open
-    endif
-endf
-                    
-function! ClosePair(char)
-    if getline('.')[col('.') - 1] == a:char
-        return "\<Right>"
-    else
-        return a:char
-    endif
-endf
-
-set background=dark
 colorscheme desert
 
 " 第80列高亮
@@ -135,3 +137,5 @@ let g:DoxygenToolkit_returnTag="@returns   "
 let g:DoxygenToolkit_authorName="linkkingjay"
 
 set ignorecase smartcase
+nmap <F8> :TagbarToggle<CR>
+let g:jsx_ext_required = 0
