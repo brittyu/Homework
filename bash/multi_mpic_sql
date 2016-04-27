@@ -7,10 +7,10 @@ fi
 target=$1
 engine="innodb"
 migrate_path="log/models.migrate"
-meta_path="src/meta";
+meta_path="src/meta"
 
-script_dir=$(dirname pwd);
-cd ${script_dir};
+script_dir=$(dirname pwd)
+cd ${script_dir}
 
 sql_file="${migrate_path}/database.sql"
 
@@ -50,7 +50,7 @@ if [ "${target}" = "init" ]; then
 
     echo "init done"
 
-    exit;
+    exit
 fi
 
 temp=""
@@ -60,7 +60,7 @@ do
     name=`basename ${meta}`
     name=${name/.meta.xml:/}
     table=${name/.router.xml:/}
-    if [ "`echo ${temp} | grep ${table}`" = "" ];then
+    if [ "`echo ${temp} | grep ${table}`" = "" ]; then
 	temp=${temp}" ${table}"
     fi
 done
