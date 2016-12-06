@@ -1,9 +1,0 @@
-<div class="left_brief left_introduce">
-            <ul id="leftNav">
-		<!--验证是在哪个分类中,在页面上显示不同的效果-->
-		<!--review和其他几个选项在不同的控制器下,分开写;-->
-		{% for c in list %}
-		<li><a {% if c.id == category.id %}class = "bac_blue"{% endif %} href="{{ site_url('p') }}/{{ c.id }}">{{ c.category }}</a></li>
-		{% endfor %}
-            </ul>
-       </div>

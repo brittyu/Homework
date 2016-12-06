@@ -134,7 +134,7 @@ set cc=81
 let g:DoxygenToolkit_briefTag_pre="@synopsis  "
 let g:DoxygenToolkit_paramTag_pre="@param "
 let g:DoxygenToolkit_returnTag="@returns   "
-let g:DoxygenToolkit_authorName="linkkingjay"
+let g:DoxygenToolkit_authorName="brittyu"
 
 set ignorecase smartcase
 nmap <F8> :TagbarToggle<CR>
